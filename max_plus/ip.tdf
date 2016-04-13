@@ -1,0 +1,28 @@
+SUBDESIGN ip
+(
+	clk,
+	enabled,
+	overwrite,
+	in[4..0] : INPUT;
+	address[4..0] : OUTPUT;
+)
+
+VARIABLE
+	ff[4..0] : DFF;
+
+BEGIN
+
+ff[].(CLRn, PRn, clk) = (VCC, VCC, clk);
+IF enabled THEN
+	IF overwrite THEN
+		ff[].d = in[];
+	ELSE
+		ff[].d = ff[].q + 1;
+	END IF;
+ELSE
+	ff[].d = ff[].q;
+END IF;
+
+address[] = ff[].q;
+
+END;

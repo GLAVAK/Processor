@@ -1,0 +1,28 @@
+INCLUDE "lpm_ram_dp.inc";
+SUBDESIGN mem
+(
+	address[4..0], in[7..0], write, clk : INPUT;
+	out[7..0] : OUTPUT;
+)
+VARIABLE
+	ram: lpm_ram_dp WITH (
+		LPM_WIDTH = 8,
+		LPM_WIDTHAD = 5,
+		LPM_FILE = "mem.mif",
+		LPM_ADDRESS_CONTROL = "REGISTERED",
+		LPM_OUTDATA = "REGISTERED",
+		LPM_INDATA = "REGISTERED");
+
+BEGIN
+
+ram.(wrclock, rdclock) = (clk, clk);
+
+ram.wren = write;
+ram.rden = !write;
+
+ram.wraddress[] = address[];
+ram.rdaddress[] = address[];
+ram.data[] = in[];
+out[] = ram.q[];
+
+END;

@@ -1,0 +1,30 @@
+SUBDESIGN bus_controller
+(
+	from_ip[7..0],
+	from_mem[7..0],
+	from_ob[7..0],
+	from_acc[7..0],
+	from_ir[7..0],
+	in[2..0] : INPUT;
+	main_bus[7..0] : OUTPUT;
+)
+
+BEGIN
+
+CASE in[] IS
+	WHEN b"000" =>
+		main_bus[] = from_ip[];
+	WHEN b"001" =>
+		main_bus[] = from_mem[];
+	WHEN b"010" =>
+		main_bus[] = from_ob[];
+	WHEN b"011" =>
+		main_bus[] = from_acc[];
+	WHEN b"100" =>
+		main_bus[] = from_ir[];
+END CASE;
+
+
+END;
+
+

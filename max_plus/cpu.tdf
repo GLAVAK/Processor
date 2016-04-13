@@ -1,0 +1,80 @@
+INCLUDE "mem.inc";
+INCLUDE "ip.inc";
+INCLUDE "bus_controller.inc";
+INCLUDE "operational_block.inc";
+INCLUDE "accumulator.inc";
+INCLUDE "ir.inc";
+INCLUDE "mcu.inc";
+SUBDESIGN cpu
+(
+	clk : INPUT;
+	acc[7..0], mem_out[7..0], bus[7..0], ir_out[7..0], ip_oww : OUTPUT;
+)
+
+VARIABLE
+	main_bus[7..0] : NODE;
+	
+	cpu_mem : mem;
+	cpu_ip : ip;
+	cpu_bus : bus_controller;
+	cpu_ob : operational_block;
+	cpu_acc : accumulator;
+	cpu_ir : ir;
+
+	cpu_mcu : mcu;
+
+BEGIN
+
+acc[] = cpu_acc.out[];
+mem_out[] = cpu_mem.out[];
+bus[] = main_bus[];
+ir_out[] = cpu_ir.out[];
+
+ip_oww = cpu_mcu.ip_overwrite;
+
+% Clock signals: %
+cpu_mem.clk = clk;
+cpu_ip.clk = clk;
+cpu_acc.clk = clk;
+cpu_ir.clk = clk;
+cpu_mcu.clk = clk;
+
+% Bus controller set up: %
+cpu_bus.from_ip[4..0] = cpu_ip.address[];
+cpu_bus.from_ip[7..5] = (VCC, VCC, VCC);
+cpu_bus.from_mem[] = cpu_mem.out[];
+cpu_bus.from_ob[] = cpu_ob.q[];
+cpu_bus.from_acc[] = cpu_acc.out[];
+cpu_bus.from_ir[] = cpu_ir.out[];
+
+cpu_bus.in[] = cpu_mcu.bus_controller_in[];
+main_bus[] = cpu_bus.main_bus[];
+
+% Memory: %
+cpu_mem.write = cpu_mcu.memory_write;
+cpu_mem.address[] = main_bus[4..0];
+cpu_mem.in[] = cpu_acc.out[];
+% Instruction Pointer: %
+cpu_ip.enabled = cpu_mcu.ip_enabled;
+cpu_ip.overwrite = cpu_mcu.ip_overwrite;
+cpu_ip.in[] = main_bus[4..0];
+% Operational block: %
+cpu_ob.operator[1..0] = cpu_mcu.ob_operator[1..0];
+cpu_ob.a[] = cpu_acc.out[];
+cpu_ob.b[] = main_bus[];
+% Accumulator: %
+cpu_acc.enabled = cpu_mcu.accumulator_enabled;
+IF cpu_mcu.accumulator_from_bus THEN
+	cpu_acc.in[] = main_bus[];
+ELSE
+	cpu_acc.in[] = cpu_ob.q[];
+END IF;
+% Instruction Register: %
+cpu_ir.enabled = cpu_mcu.ir_enabled;
+cpu_ir.in[] = main_bus[];
+
+% MCU: %
+cpu_mcu.cop[] = cpu_ir.out[7..5];
+cpu_mcu.boolean = cpu_acc.boolean;
+
+END;

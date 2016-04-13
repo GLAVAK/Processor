@@ -1,0 +1,27 @@
+SUBDESIGN accumulator
+(
+	in[7..0],
+	enabled,
+	clk : INPUT;
+	out[7..0],
+	boolean : OUTPUT;
+)
+
+VARIABLE
+	ff[7..0] : DFF;
+
+BEGIN
+
+ff[].(CLRn, PRn, clk) = (VCC, VCC, clk);
+
+IF enabled THEN
+	ff[].d = in[];
+ELSE
+	ff[].d = ff[].q;
+END IF;
+
+out[] = ff[].q;
+
+boolean = ff7.q # ff6.q # ff5.q # ff4.q # ff3.q # ff2.q # ff1.q # ff0.q;
+
+END;

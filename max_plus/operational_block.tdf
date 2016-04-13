@@ -1,0 +1,22 @@
+SUBDESIGN operational_block
+(
+	a[7..0],
+	b[7..0],
+	operator[1..0] : INPUT;
+	q[7..0] : OUTPUT;
+)
+
+BEGIN
+
+CASE operator[] IS
+	WHEN b"00" =>
+		q[] = a[] + b[];
+	WHEN b"01" =>
+		q[] = a[] - b[];
+%	WHEN b"10" =>
+		q[] = a[] * b[];
+	WHEN b"11" =>
+		q[] = a[] DIV b[];%
+END CASE;
+
+END;

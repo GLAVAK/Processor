@@ -1,3 +1,18 @@
+# Max plus files
+*.cnf
+*.mmf
+*.ttf
+*.hex
+*.sof
+*.snf
+*.pof
+*.rpt
+*.fit
+*.ndb
+*.acf
+*.hif
+*.pin
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
