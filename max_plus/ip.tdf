@@ -3,12 +3,12 @@ SUBDESIGN ip
 	clk,
 	enabled,
 	overwrite,
-	in[4..0] : INPUT;
-	address[4..0] : OUTPUT;
+	in[7..0] : INPUT;
+	address[7..0] : OUTPUT;
 )
 
 VARIABLE
-	ff[4..0] : DFF;
+	ff[7..0] : DFF;
 
 BEGIN
 

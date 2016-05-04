@@ -20,7 +20,7 @@
 
 -- MAX+plus II Include File
 -- Version 10.2 06/28/2002
--- Created: Mon Apr 11 09:58:57 2016
+-- Created: Wed May 04 22:06:52 2016
 
-FUNCTION ir (in[7..0], enabled, clk)
-    RETURNS (out[7..0]);
+FUNCTION ir (in[11..0], enabled, clk)
+    RETURNS (out[11..0]);

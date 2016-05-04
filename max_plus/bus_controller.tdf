@@ -1,12 +1,12 @@
 SUBDESIGN bus_controller
 (
-	from_ip[7..0],
-	from_mem[7..0],
-	from_ob[7..0],
-	from_acc[7..0],
-	from_ir[7..0],
+	from_ip[11..0],
+	from_mem[11..0],
+	from_ob[11..0],
+	from_acc[11..0],
+	from_ir[11..0],
 	in[2..0] : INPUT;
-	main_bus[7..0] : OUTPUT;
+	main_bus[11..0] : OUTPUT;
 )
 
 BEGIN

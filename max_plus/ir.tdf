@@ -1,13 +1,13 @@
 SUBDESIGN ir
 (
-	in[7..0],
+	in[11..0],
 	enabled,
 	clk : INPUT;
-	out[7..0] : OUTPUT;
+	out[11..0] : OUTPUT;
 )
 
 VARIABLE
-	ff[7..0] : DFF;
+	ff[11..0] : DFF;
 
 BEGIN
 

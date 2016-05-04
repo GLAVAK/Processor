@@ -8,8 +8,10 @@ namespace MyProcessorIDE
 {
     static class Assembler
     {
-        public static int MemoryDepth = 32;
-        public static int MemoryWidth = 8;
+        public static int MemoryDepth = 256;
+        public static int MemoryDepthLog = 8;
+        public static int COPLength = 4;
+        public static int MemoryWidth = 12;
 
         public static String Assemble(String assembleCode)
         {
@@ -30,7 +32,7 @@ namespace MyProcessorIDE
             for (int index = 0; index < MemoryDepth; index++)
             {
                 output.Append('\t');
-                output.Append(prependLeadingZeros(Convert.ToString(index, 2), 5));
+                output.Append(prependLeadingZeros(Convert.ToString(index, 2), MemoryDepthLog));
                 output.Append(" : ");
                 if (index < lines.Length && lines[index].Trim() != "")
                 {
@@ -38,7 +40,7 @@ namespace MyProcessorIDE
                 }
                 else
                 {
-                    output.Append("00000000");
+                    output.Append(prependLeadingZeros("", MemoryWidth));
                 }
                 output.AppendLine(";");
             }
@@ -52,7 +54,7 @@ namespace MyProcessorIDE
             String result = "";
             command = command.ToLower();
 
-            if(command.IndexOf('%') != -1)
+            if (command.IndexOf('%') != -1)
             {
                 command = command.Substring(0, command.IndexOf('%'));
             }
@@ -60,41 +62,41 @@ namespace MyProcessorIDE
             if (command.StartsWith("add"))
             {
                 command = command.Substring(3);
-                result = "000";
+                result = "0000";
             }
             else if (command.StartsWith("sub"))
             {
                 command = command.Substring(3);
-                result = "001";
+                result = "0001";
             }
             else if (command.StartsWith("mul"))
             {
                 command = command.Substring(3);
-                result = "010";
+                result = "0010";
             }
             else if (command.StartsWith("div"))
             {
                 command = command.Substring(3);
-                result = "011";
+                result = "0011";
             }
             else if (command.StartsWith("load"))
             {
                 command = command.Substring(4);
-                result = "100";
+                result = "1100";
             }
             else if (command.StartsWith("save"))
             {
                 command = command.Substring(4);
-                result = "101";
+                result = "1101";
             }
             else if (command.StartsWith("goto"))
             {
                 command = command.Substring(4);
-                result = "110";
+                result = "1110";
             }
             else if (command.StartsWith("print"))
             {
-                return "11100000";
+                return "1111" + prependLeadingZeros("", MemoryWidth-COPLength);
             }
             else if (command.StartsWith("const"))
             {
@@ -120,7 +122,7 @@ namespace MyProcessorIDE
 
             command = command.Trim();
 
-            if (command.Length == 5)
+            if (command.Length == MemoryWidth - COPLength)
             {
                 try
                 {
@@ -148,7 +150,7 @@ namespace MyProcessorIDE
                     else
                     {
                         String argString = Convert.ToString(arg, 2);
-                        argString = prependLeadingZeros(argString, 5);
+                        argString = prependLeadingZeros(argString, MemoryWidth - COPLength);
                         result += argString;
                     }
                 }

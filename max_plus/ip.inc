@@ -20,7 +20,7 @@
 
 -- MAX+plus II Include File
 -- Version 10.2 06/28/2002
--- Created: Tue Apr 12 20:48:04 2016
+-- Created: Wed May 04 22:06:57 2016
 
-FUNCTION ip (clk, enabled, overwrite, in[4..0])
-    RETURNS (address[4..0]);
+FUNCTION ip (clk, enabled, overwrite, in[7..0])
+    RETURNS (address[7..0]);

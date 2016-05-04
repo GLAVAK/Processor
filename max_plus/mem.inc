@@ -20,7 +20,7 @@
 
 -- MAX+plus II Include File
 -- Version 10.2 06/28/2002
--- Created: Tue Apr 12 20:47:36 2016
+-- Created: Wed May 04 22:06:47 2016
 
-FUNCTION mem (address[4..0], in[7..0], write, clk)
-    RETURNS (out[7..0]);
+FUNCTION mem (address[7..0], in[11..0], write, clk)
+    RETURNS (out[11..0]);

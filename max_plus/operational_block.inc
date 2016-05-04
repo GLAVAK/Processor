@@ -20,7 +20,7 @@
 
 -- MAX+plus II Include File
 -- Version 10.2 06/28/2002
--- Created: Wed Apr 13 18:14:31 2016
+-- Created: Wed May 04 22:06:40 2016
 
-FUNCTION operational_block (a[7..0], b[7..0], operator[1..0])
-    RETURNS (q[7..0]);
+FUNCTION operational_block (a[11..0], b[11..0], operator[1..0])
+    RETURNS (q[11..0]);

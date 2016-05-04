@@ -20,7 +20,7 @@
 
 -- MAX+plus II Include File
 -- Version 10.2 06/28/2002
--- Created: Wed Apr 13 18:40:02 2016
+-- Created: Wed May 04 22:07:14 2016
 
-FUNCTION accumulator (in[7..0], enabled, clk)
-    RETURNS (out[7..0], boolean);
+FUNCTION accumulator (in[11..0], enabled, clk)
+    RETURNS (out[11..0], boolean);

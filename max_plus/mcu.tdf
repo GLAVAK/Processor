@@ -1,6 +1,6 @@
 SUBDESIGN mcu
 (
-	cop[2..0],
+	cop[3..0],
 	clk,
 	boolean : INPUT;
 	bus_controller_in[2..0],
@@ -28,19 +28,19 @@ sm.clk = clk;
 
 IF sm == start THEN
 	CASE cop[] IS
-		WHEN b"100" =>
+		WHEN b"1100" =>
 			sm = load0;
-		WHEN b"101" =>
+		WHEN b"1101" =>
 			sm = save0;
-		WHEN b"110" =>
+		WHEN b"1110" =>
 			IF boolean THEN
 				sm = gotoMove;
 			ELSE
 				sm = gotoPass;
 			END IF;
-		WHEN b"111" =>
+		WHEN b"1111" =>
 			sm = print;
-		WHEN OTHERS =>
+		WHEN b"00XX" =>
 			% It's operation (add/sub/mul/div) %
 			sm = op0;
 	END CASE;

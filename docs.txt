@@ -1,17 +1,18 @@
 Command:
-    7.54...0
-    XXXAAAAA
+    1
+    1..87......0
+    XXXXAAAAAAAA
      ^   ^
      COP argument
 
 Availible commands:
-    COP | ALIAS | Meaning(@address is instruction argument)
-    000    ADD    Adds data from @address and accumulator contents and puts it into the accumulator
-    001    SUB    Subtracts data from @address from accumulator contents and puts it into the accumulator
-    010    MUL    Not implemented yet
-    011    DIV    Not implemented yet
-    100   LOAD    Loads data from @address to accumulator
-    101   SAVE    Saves accumulator contents to @address
-    110   GOTO    If accumulator has anything but zero, moves instruction pointer to @address
-    111   PRINT   Prints current accumulator contents to the output and stops program
+    COP  | ALIAS | Meaning(@address is instruction argument)
+    0000    ADD    Adds data from @address and accumulator contents and puts it into the accumulator
+    0001    SUB    Subtracts data from @address from accumulator contents and puts it into the accumulator
+    0010    MUL    Not implemented yet
+    0011    DIV    Not implemented yet
+    1100   LOAD    Loads data from @address to accumulator
+    1101   SAVE    Saves accumulator contents to @address
+    1110   GOTO    If accumulator has anything but zero, moves instruction pointer to @address
+    1111   PRINT   Prints current accumulator contents to the output and stops program
 Last two bits of COP passed to operational block to set the operator code

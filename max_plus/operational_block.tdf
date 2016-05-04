@@ -1,9 +1,9 @@
 SUBDESIGN operational_block
 (
-	a[7..0],
-	b[7..0],
+	a[11..0],
+	b[11..0],
 	operator[1..0] : INPUT;
-	q[7..0] : OUTPUT;
+	q[11..0] : OUTPUT;
 )
 
 BEGIN

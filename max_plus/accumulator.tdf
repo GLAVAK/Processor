@@ -1,14 +1,14 @@
 SUBDESIGN accumulator
 (
-	in[7..0],
+	in[11..0],
 	enabled,
 	clk : INPUT;
-	out[7..0],
+	out[11..0],
 	boolean : OUTPUT;
 )
 
 VARIABLE
-	ff[7..0] : DFF;
+	ff[11..0] : DFF;
 
 BEGIN
 
