@@ -1,7 +1,9 @@
 INCLUDE "mem.inc";
 INCLUDE "ip.inc";
 INCLUDE "bus_controller.inc";
+INCLUDE "acc_controller.inc";
 INCLUDE "operational_block.inc";
+INCLUDE "logical_block.inc";
 INCLUDE "accumulator.inc";
 INCLUDE "ir.inc";
 INCLUDE "mcu.inc";
@@ -17,7 +19,9 @@ VARIABLE
 	cpu_mem : mem;
 	cpu_ip : ip;
 	cpu_bus : bus_controller;
+	cpu_acc_c : acc_controller;
 	cpu_ob : operational_block;
+	cpu_lb : logical_block;
 	cpu_acc : accumulator;
 	cpu_ir : ir;
 
@@ -46,11 +50,14 @@ cpu_mcu.clk = clk;
 cpu_bus.from_ip[7..0] = cpu_ip.address[];
 cpu_bus.from_ip[11..8] = (VCC, VCC, VCC, VCC);
 cpu_bus.from_mem[] = cpu_mem.out[];
-cpu_bus.from_ob[] = cpu_ob.q[];
-cpu_bus.from_acc[] = cpu_acc.out[];
 cpu_bus.from_ir[] = cpu_ir.out[];
 
+cpu_acc_c.from_bus[] = main_bus[];
+cpu_acc_c.from_ob[] = cpu_ob.q[];
+cpu_acc_c.from_lb[] = cpu_lb.q[];
+
 cpu_bus.in[] = cpu_mcu.bus_controller_in[];
+cpu_acc_c.in[] = cpu_mcu.acc_controller_in[];
 main_bus[] = cpu_bus.main_bus[];
 
 % Memory: %
@@ -62,16 +69,16 @@ cpu_ip.enabled = cpu_mcu.ip_enabled;
 cpu_ip.overwrite = cpu_mcu.ip_overwrite;
 cpu_ip.in[] = main_bus[7..0];
 % Operational block: %
-cpu_ob.operator[1..0] = cpu_mcu.ob_operator[1..0];
+cpu_ob.operator[] = cpu_mcu.operator_code[];
 cpu_ob.a[] = cpu_acc.out[];
 cpu_ob.b[] = main_bus[];
+% Logical block: %
+cpu_lb.operator[] = cpu_mcu.operator_code[];
+cpu_lb.a[] = cpu_acc.out[];
+cpu_lb.b[] = main_bus[];
 % Accumulator: %
 cpu_acc.enabled = cpu_mcu.accumulator_enabled;
-IF cpu_mcu.accumulator_from_bus THEN
-	cpu_acc.in[] = main_bus[];
-ELSE
-	cpu_acc.in[] = cpu_ob.q[];
-END IF;
+cpu_acc.in[] = cpu_acc_c.out[];
 % Instruction Register: %
 cpu_ir.enabled = cpu_mcu.ir_enabled;
 cpu_ir.in[] = main_bus[];

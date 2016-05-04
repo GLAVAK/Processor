@@ -1,0 +1,22 @@
+SUBDESIGN acc_controller
+(
+	from_bus[11..0],
+	from_ob[11..0],
+	from_lb[11..0],
+	in[1..0] : INPUT;
+	out[11..0] : OUTPUT;
+)
+
+BEGIN
+
+CASE in[] IS
+	WHEN b"00" =>
+		out[] = from_bus[];
+	WHEN b"01" =>
+		out[] = from_ob[];
+	WHEN b"10" =>
+		out[] = from_lb[];
+END CASE;
+
+
+END;

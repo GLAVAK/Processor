@@ -172,9 +172,9 @@ namespace MyProcessorIDE
             e.ChangedRange.ClearStyle(CommentStyle);
 
             // Commands:
-            e.ChangedRange.SetStyle(CommandStyle, @"\b(add|sub|mul|div|load|save|goto|print)", RegexOptions.IgnoreCase);
+            e.ChangedRange.SetStyle(CommandStyle, @"\b(add|sub|mul|div|and|or|xor|not|load|save|goto|print)", RegexOptions.IgnoreCase);
             // Args:
-            e.ChangedRange.SetStyle(ArgumentStyle, @"\b(add|sub|mul|div|load|save|goto)\s+(?<range>\d+?)\b", RegexOptions.IgnoreCase);
+            e.ChangedRange.SetStyle(ArgumentStyle, @"\b(add|sub|mul|div|and|or|xor|not|load|save|goto)\s+(?<range>\d+?)\b", RegexOptions.IgnoreCase);
 
             e.ChangedRange.SetStyle(DirectiveStyle, @"\b(const)", RegexOptions.IgnoreCase);
             e.ChangedRange.SetStyle(ConstantStyle, @"\b(const)\s+(?<range>\d+?)\b", RegexOptions.IgnoreCase);

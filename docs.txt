@@ -6,13 +6,39 @@ Command:
      COP argument
 
 Availible commands:
-    COP  | ALIAS | Meaning(@address is instruction argument)
+    COP  | ALIAS | Meaning (@address is instruction argument)
+
+--- Math operations ---
+
     0000    ADD    Adds data from @address and accumulator contents and puts it into the accumulator
     0001    SUB    Subtracts data from @address from accumulator contents and puts it into the accumulator
     0010    MUL    Not implemented yet
     0011    DIV    Not implemented yet
+
+--- Logical operations ---
+
+    0100    AND    Puts 1 into the accumulator, if accumulator contents AND data from @adress contains anything but 0, 0 otherwise
+    0101    OR     Puts 1 into the accumulator, if accumulator contents OR data from @adress contains anything but 0, 0 otherwise
+    0110    XOR    Puts 1 into the accumulator, if accumulator contents XOR data from @adress contains anything but 0, 0 otherwise
+    0111    NOT    Puts 1 into the accumulator, if accumulator contents is 0, 0 otherwise
+
+--- Processor functions ---
+
     1100   LOAD    Loads data from @address to accumulator
     1101   SAVE    Saves accumulator contents to @address
     1110   GOTO    If accumulator has anything but zero, moves instruction pointer to @address
-    1111   PRINT   Prints current accumulator contents to the output and stops program
-Last two bits of COP passed to operational block to set the operator code
+    1111   PRINT   Prints current accumulator contents to the output and stops program (@adress is ignored)
+
+Last two bits of COP passed to operational/logical block to set the operator code
+
+bus_controller:
+ in | output
+ 00   From instruction pointer
+ 01   From memory
+ 10   From instruction register
+
+acc_controller:
+ in | output
+ 00   From main bus
+ 01   From operational block
+ 10   From logical block

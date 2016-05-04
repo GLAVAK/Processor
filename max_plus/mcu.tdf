@@ -3,18 +3,20 @@ SUBDESIGN mcu
 	cop[3..0],
 	clk,
 	boolean : INPUT;
-	bus_controller_in[2..0],
+	bus_controller_in[1..0],
+	acc_controller_in[1..0],
 	memory_write,
 	ip_enabled, ip_overwrite,
-	ob_operator[1..0],
-	accumulator_from_bus, accumulator_enabled,
+	operator_code[1..0],
+	accumulator_enabled,
 	ir_enabled, print_acc : OUTPUT;
 )
 
 VARIABLE
 	sm : MACHINE WITH STATES (
 		read, start,
-		op0, op1,
+		math0, math1,
+		logic0, logic1,
 		load0, load1,
 		save0,
 		gotoPass, gotoMove,
@@ -28,6 +30,12 @@ sm.clk = clk;
 
 IF sm == start THEN
 	CASE cop[] IS
+		WHEN b"00XX" =>
+			% It's math operation (add/sub/mul/div) %
+			sm = math0;
+		WHEN b"01XX" =>
+			% It's logic operation (and/or/xor/not) %
+			sm = logic0;
 		WHEN b"1100" =>
 			sm = load0;
 		WHEN b"1101" =>
@@ -40,9 +48,6 @@ IF sm == start THEN
 			END IF;
 		WHEN b"1111" =>
 			sm = print;
-		WHEN b"00XX" =>
-			% It's operation (add/sub/mul/div) %
-			sm = op0;
 	END CASE;
 END IF;
 
@@ -51,8 +56,11 @@ TABLE
 
 	read   => start;
 	
-	op0    => op1;
-	op1    => finish;
+	math0  => math1;
+	math1  => finish;	
+
+	logic0  => logic1;
+	logic1  => finish;
 
 	load0  => load1;
 	load1  => finish;
@@ -67,29 +75,32 @@ TABLE
 	finish => read;
 END TABLE;
 
-ob_operator[] = cop[1..0]; % Last two bits of COP passed to operational block to set the operator code %
+operator_code[] = cop[1..0]; % Last two bits of COP passed to operational/logical block to set the operator code %
 
 TABLE
-	sm     => bus_controller_in[], memory_write, ip_enabled, ip_overwrite, accumulator_from_bus, accumulator_enabled, ir_enabled;
+	sm     => bus_controller_in[], acc_controller_in[], memory_write, ip_enabled, ip_overwrite, accumulator_enabled, ir_enabled;
 
-	read   => b"001"             , GND         , GND       , GND         , GND                 , GND                , VCC       ; % Read from mem to ir %
-	start  => b"001"             , GND         , GND       , GND         , GND                 , GND                , VCC       ; % Read from mem to ir %
+	read   => b"01"              , b"01"              , GND         , GND       , GND         , GND                , VCC       ; % Read from mem to ir %
+	start  => b"01"              , b"01"              , GND         , GND       , GND         , GND                , VCC       ; % Read from mem to ir %
 
-	op0    => b"001"             , GND         , GND       , GND         , GND                 , GND                , GND       ; % Read from mem to bus %
-	op1    => b"001"             , GND         , VCC       , GND         , GND                 , VCC                , GND       ; % Read from op to acc %
+	math0  => b"01"              , b"01"              , GND         , GND       , GND         , GND                , GND       ; % Read from mem to bus %
+	math1  => b"01"              , b"01"              , GND         , VCC       , GND         , VCC                , GND       ; % Read from ob to acc %
 
-	load0  => b"001"             , GND         , GND       , GND         , VCC                 , GND                , GND       ; % Read from mem to bus %
-	load1  => b"001"             , GND         , VCC       , GND         , VCC                 , VCC                , GND       ; % Read from bus to acc %
+	logic0 => b"01"              , b"10"              , GND         , GND       , GND         , GND                , GND       ; % Read from mem to bus %
+	logic1 => b"01"              , b"10"              , GND         , VCC       , GND         , VCC                , GND       ; % Read from lb to acc %
 
-	save0  => b"100"             , VCC         , VCC       , GND         , GND                 , GND                , GND       ; % Read from acc to mem %
+	load0  => b"01"              , b"00"              , GND         , GND       , GND         , GND                , GND       ; % Read from mem to bus %
+	load1  => b"01"              , b"00"              , GND         , VCC       , GND         , VCC                , GND       ; % Read from bus to acc %
 
-	gotoPass => b"001"           , GND         , VCC       , GND         , GND                 , GND                , GND       ; % Enable ip and finish %
+	save0  => b"10"              , b"01"              , VCC         , VCC       , GND         , GND                , GND       ; % Read from acc to mem %
 
-	gotoMove => b"100"           , GND         , VCC       , VCC         , GND                 , GND                , GND       ; % Enable ip and overwrite it with bus data, which comes from ir %
+	gotoPass => b"01"            , b"01"              , GND         , VCC       , GND         , GND                , GND       ; % Enable ip and finish %
 
-	print  => b"100"             , GND         , GND       , GND         , GND                 , GND                , GND       ; % Do nothing, basically %
+	gotoMove => b"10"            , b"01"              , GND         , VCC       , VCC         , GND                , GND       ; % Enable ip and overwrite it with bus data, which comes from ir %
 
-	finish => b"000"             , GND         , GND       , GND         , GND                 , GND                , GND       ;
+	print  => b"10"              , b"01"              , GND         , GND       , GND         , GND                , GND       ; % Do nothing, basically %
+
+	finish => b"00"              , b"01"              , GND         , GND       , GND         , GND                , GND       ;
 END TABLE;
 
 print_acc = sm == print;

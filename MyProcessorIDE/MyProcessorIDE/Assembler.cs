@@ -53,11 +53,11 @@ namespace MyProcessorIDE
         {
             String result = "";
             command = command.ToLower();
-
             if (command.IndexOf('%') != -1)
             {
                 command = command.Substring(0, command.IndexOf('%'));
             }
+            command = command.Trim();
 
             if (command.StartsWith("add"))
             {
@@ -79,6 +79,25 @@ namespace MyProcessorIDE
                 command = command.Substring(3);
                 result = "0011";
             }
+            else if (command.StartsWith("and"))
+            {
+                command = command.Substring(3);
+                result = "0100";
+            }
+            else if (command.StartsWith("or"))
+            {
+                command = command.Substring(3);
+                result = "0101";
+            }
+            else if (command.StartsWith("xor"))
+            {
+                command = command.Substring(3);
+                result = "0110";
+            }
+            else if (command == "not")
+            {
+                return "1111" + prependLeadingZeros("", MemoryWidth - COPLength);
+            }
             else if (command.StartsWith("load"))
             {
                 command = command.Substring(4);
@@ -94,9 +113,9 @@ namespace MyProcessorIDE
                 command = command.Substring(4);
                 result = "1110";
             }
-            else if (command.StartsWith("print"))
+            else if (command == "print")
             {
-                return "1111" + prependLeadingZeros("", MemoryWidth-COPLength);
+                return "1111" + prependLeadingZeros("", MemoryWidth - COPLength);
             }
             else if (command.StartsWith("const"))
             {

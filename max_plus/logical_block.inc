@@ -20,7 +20,7 @@
 
 -- MAX+plus II Include File
 -- Version 10.2 06/28/2002
--- Created: Wed May 04 23:08:19 2016
+-- Created: Wed May 04 22:45:24 2016
 
-FUNCTION mcu (cop[3..0], clk, boolean)
-    RETURNS (bus_controller_in[1..0], acc_controller_in[1..0], memory_write, ip_enabled, ip_overwrite, operator_code[1..0], accumulator_enabled, ir_enabled, print_acc);
+FUNCTION logical_block (a[11..0], b[11..0], operator[1..0])
+    RETURNS (q[11..0]);

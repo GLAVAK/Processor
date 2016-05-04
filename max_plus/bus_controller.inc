@@ -20,7 +20,7 @@
 
 -- MAX+plus II Include File
 -- Version 10.2 06/28/2002
--- Created: Wed May 04 22:07:09 2016
+-- Created: Wed May 04 23:09:04 2016
 
-FUNCTION bus_controller (from_ip[11..0], from_mem[11..0], from_ob[11..0], from_acc[11..0], from_ir[11..0], in[2..0])
+FUNCTION bus_controller (from_ip[11..0], from_mem[11..0], from_ir[11..0], in[1..0])
     RETURNS (main_bus[11..0]);

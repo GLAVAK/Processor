@@ -1,0 +1,30 @@
+SUBDESIGN logical_block
+(
+	a[11..0],
+	b[11..0],
+	operator[1..0] : INPUT;
+	q[11..0] : OUTPUT;
+)
+
+VARIABLE
+	a_boolean, b_boolean : NODE;
+
+BEGIN
+
+a_boolean = a[11] # a[10] # a[9] # a[8] # a[7] # a[6] # a[5] # a[4] # a[3] # a[2] # a[1] # a[0];
+b_boolean = b[11] # b[10] # b[9] # b[8] # b[7] # b[6] # b[5] # b[4] # b[3] # b[2] # b[1] # b[0];
+
+q[11..1] = (GND, GND, GND, GND, GND, GND, GND, GND, GND, GND, GND);
+
+CASE operator[] IS
+	WHEN b"00" =>
+		q0 = a_boolean & b_boolean;
+	WHEN b"01" =>
+		q0 = a_boolean # b_boolean;
+	WHEN b"10" =>
+		q0 = a_boolean $ b_boolean;
+	WHEN b"11" =>
+		q0 = !a_boolean;
+END CASE;
+
+END;
