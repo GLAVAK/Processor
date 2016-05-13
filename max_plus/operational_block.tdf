@@ -10,12 +10,27 @@ BEGIN
 
 CASE operator[] IS
 	WHEN b"00" =>
+		% add %
 		q[] = a[] + b[];
 	WHEN b"01" =>
+		% sub %
 		q[] = a[] - b[];
-%	WHEN b"10" =>
-		q[] = a[] * b[];
-	WHEN b"11" =>
+	WHEN b"10" =>
+		% mul %
+		% This is a waste of space on chip, 13 summators, but I can't think of anything simpler %
+		q[] = (b[0] & (a[11..0])) + 
+			  (b[1] & (a[10..0], GND)) + 
+			  (b[2] &  (a[9..0], GND, GND)) + 
+			  (b[3] &  (a[8..0], GND, GND, GND)) + 
+			  (b[4] &  (a[7..0], GND, GND, GND, GND)) + 
+			  (b[5] &  (a[6..0], GND, GND, GND, GND, GND)) + 
+			  (b[6] &  (a[5..0], GND, GND, GND, GND, GND, GND)) + 
+			  (b[7] &  (a[4..0], GND, GND, GND, GND, GND, GND, GND)) + 
+			  (b[8] &  (a[3..0], GND, GND, GND, GND, GND, GND, GND, GND)) + 
+			  (b[9] &  (a[2..0], GND, GND, GND, GND, GND, GND, GND, GND, GND)) + 
+			  (b[10] & (a[1..0], GND, GND, GND, GND, GND, GND, GND, GND, GND, GND)) + 
+			  (b[11] & (a[0],    GND, GND, GND, GND, GND, GND, GND, GND, GND, GND, GND));
+%	WHEN b"11" =>
 		q[] = a[] DIV b[];%
 END CASE;
 

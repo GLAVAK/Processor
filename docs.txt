@@ -12,7 +12,7 @@ Availible commands:
 
     0000    ADD    Adds data from @address and accumulator contents and puts it into the accumulator
     0001    SUB    Subtracts data from @address from accumulator contents and puts it into the accumulator
-    0010    MUL    Not implemented yet
+    0010    MUL    Multiplies data from @address from accumulator contents and puts it into the accumulator
     0011    DIV    Not implemented yet
 
 --- Logical operations ---
