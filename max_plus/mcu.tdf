@@ -28,52 +28,49 @@ BEGIN
 
 sm.clk = clk;
 
-IF sm == start THEN
-	CASE cop[] IS
-		WHEN b"00XX" =>
-			% It's math operation (add/sub/mul/div) %
-			sm = math0;
-		WHEN b"01XX" =>
-			% It's logic operation (and/or/xor/not) %
-			sm = logic0;
-		WHEN b"1100" =>
-			sm = load0;
-		WHEN b"1101" =>
-			sm = save0;
-		WHEN b"1110" =>
-			IF boolean THEN
-				sm = gotoMove;
-			ELSE
-				sm = gotoPass;
-			END IF;
-		WHEN b"1111" =>
-			sm = print;
-	END CASE;
-END IF;
+CASE sm IS
+	WHEN start =>
+		CASE cop[] IS
+			WHEN b"00XX" =>
+				% It's math operation (add/sub/mul/div) %
+				sm = math0;
+			WHEN b"01XX" =>
+				% It's logic operation (and/or/xor/not) %
+				sm = logic0;
+			WHEN b"1100" =>
+				sm = load0;
+			WHEN b"1101" =>
+				sm = save0;
+			WHEN b"1110" =>
+				IF boolean THEN
+					sm = gotoMove;
+				ELSE
+					sm = gotoPass;
+				END IF;
+			WHEN b"1111" =>
+				sm = print;
+		END CASE;
 
-TABLE
-	sm     => sm;
-
-	read   => start;
+	WHEN read => sm = start;
 	
-	math0  => math1;
-	math1  => finish;	
+	WHEN math0  => sm = math1;
+	WHEN math1  => sm = finish;	
 
-	logic0  => logic1;
-	logic1  => finish;
+	WHEN logic0 => sm = logic1;
+	WHEN logic1 => sm = finish;
 
-	load0  => load1;
-	load1  => finish;
+	WHEN load0 => sm = load1;
+	WHEN load1 => sm = finish;
 
-	save0  => finish;
+	WHEN save0 => sm = finish;
 
-	gotoPass => finish;
-	gotoMove => finish;
+	WHEN gotoPass => sm = finish;
+	WHEN gotoMove => sm = finish;
 
-	print => print;
+	WHEN print => sm = print;
 
-	finish => read;
-END TABLE;
+	WHEN finish => sm = read;
+END CASE;
 
 operator_code[] = cop[1..0]; % Last two bits of COP passed to operational/logical block to set the operator code %
 
