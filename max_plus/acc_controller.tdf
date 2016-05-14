@@ -3,6 +3,7 @@ SUBDESIGN acc_controller
 	from_bus[11..0],
 	from_ob[11..0],
 	from_lb[11..0],
+	from_reminder[11..0],
 	in[1..0] : INPUT;
 	out[11..0] : OUTPUT;
 )
@@ -16,6 +17,8 @@ CASE in[] IS
 		out[] = from_ob[];
 	WHEN b"10" =>
 		out[] = from_lb[];
+	WHEN b"11" =>
+		out[] = from_reminder[];
 END CASE;
 
 

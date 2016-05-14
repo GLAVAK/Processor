@@ -20,7 +20,7 @@
 
 -- MAX+plus II Include File
 -- Version 10.2 06/28/2002
--- Created: Wed May 04 22:52:24 2016
+-- Created: Sat May 14 15:58:48 2016
 
-FUNCTION acc_controller (from_bus[11..0], from_ob[11..0], from_lb[11..0], in[1..0])
+FUNCTION acc_controller (from_bus[11..0], from_ob[11..0], from_lb[11..0], from_reminder[11..0], in[1..0])
     RETURNS (out[11..0]);

@@ -55,6 +55,7 @@ cpu_bus.from_ir[] = cpu_ir.out[];
 cpu_acc_c.from_bus[] = main_bus[];
 cpu_acc_c.from_ob[] = cpu_ob.q[];
 cpu_acc_c.from_lb[] = cpu_lb.q[];
+cpu_acc_c.from_reminder[] = cpu_ob.reminder[];
 
 cpu_bus.in[] = cpu_mcu.bus_controller_in[];
 cpu_acc_c.in[] = cpu_mcu.acc_controller_in[];

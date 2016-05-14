@@ -1,22 +1,23 @@
+INCLUDE "lpm_divide.inc";
 SUBDESIGN operational_block
 (
 	a[11..0],
 	b[11..0],
 	operator[1..0] : INPUT;
-	q[11..0] : OUTPUT;
+	q[11..0], reminder[11..0] : OUTPUT;
 )
 
 BEGIN
 
 CASE operator[] IS
 	WHEN b"00" =>
-		% add %
+		% ADD %
 		q[] = a[] + b[];
 	WHEN b"01" =>
-		% sub %
+		% SUB %
 		q[] = a[] - b[];
 	WHEN b"10" =>
-		% mul %
+		% MUL %
 		% This is a waste of space on chip, 13 summators, but I can't think of anything simpler %
 		q[] = (b[0] & (a[11..0])) + 
 			  (b[1] & (a[10..0], GND)) + 
@@ -30,8 +31,10 @@ CASE operator[] IS
 			  (b[9] &  (a[2..0], GND, GND, GND, GND, GND, GND, GND, GND, GND)) + 
 			  (b[10] & (a[1..0], GND, GND, GND, GND, GND, GND, GND, GND, GND, GND)) + 
 			  (b[11] & (a[0],    GND, GND, GND, GND, GND, GND, GND, GND, GND, GND, GND));
-%	WHEN b"11" =>
-		q[] = a[] DIV b[];%
+	WHEN b"11" =>
+		% DIV or MOD %
+		(q[], reminder[]) = lpm_divide(a[], b[], , , )
+								WITH (LPM_WIDTHN = 12, LPM_WIDTHD = 12);
 END CASE;
 
 END;

@@ -98,6 +98,11 @@ namespace MyProcessorIDE
             {
                 return "1111" + prependLeadingZeros("", MemoryWidth - COPLength);
             }
+            else if (command.StartsWith("mod"))
+            {
+                command = command.Substring(3);
+                result = "1011";
+            }
             else if (command.StartsWith("load"))
             {
                 command = command.Substring(4);

@@ -17,6 +17,7 @@ VARIABLE
 		read, start,
 		math0, math1,
 		logic0, logic1,
+		mod0, mod1,
 		load0, load1,
 		save0,
 		gotoPass, gotoMove,
@@ -37,6 +38,9 @@ CASE sm IS
 			WHEN b"01XX" =>
 				% It's logic operation (and/or/xor/not) %
 				sm = logic0;
+			WHEN b"1011" =>
+				% MOD %
+				sm = mod0;
 			WHEN b"1100" =>
 				sm = load0;
 			WHEN b"1101" =>
@@ -62,6 +66,9 @@ CASE sm IS
 	WHEN load0 => sm = load1;
 	WHEN load1 => sm = finish;
 
+	WHEN mod0 => sm = mod1;
+	WHEN mod1 => sm = finish;
+
 	WHEN save0 => sm = finish;
 
 	WHEN gotoPass => sm = finish;
@@ -81,10 +88,13 @@ TABLE
 	start  => b"01"              , b"01"              , GND         , GND       , GND         , GND                , VCC       ; % Read from mem to ir %
 
 	math0  => b"01"              , b"01"              , GND         , GND       , GND         , GND                , GND       ; % Read from mem to bus %
-	math1  => b"01"              , b"01"              , GND         , VCC       , GND         , VCC                , GND       ; % Read from ob to acc %
+	math1  => b"01"              , b"01"              , GND         , VCC       , GND         , VCC                , GND       ; % Read from ob.q to acc %
 
 	logic0 => b"01"              , b"10"              , GND         , GND       , GND         , GND                , GND       ; % Read from mem to bus %
-	logic1 => b"01"              , b"10"              , GND         , VCC       , GND         , VCC                , GND       ; % Read from lb to acc %
+	logic1 => b"01"              , b"10"              , GND         , VCC       , GND         , VCC                , GND       ; % Read from lb.q to acc %
+
+	mod0   => b"01"              , b"11"              , GND         , GND       , GND         , GND                , GND       ; % Read from mem to bus %
+	mod1   => b"01"              , b"11"              , GND         , VCC       , GND         , VCC                , GND       ; % Read from ob.reminder to acc %
 
 	load0  => b"01"              , b"00"              , GND         , GND       , GND         , GND                , GND       ; % Read from mem to bus %
 	load1  => b"01"              , b"00"              , GND         , VCC       , GND         , VCC                , GND       ; % Read from bus to acc %

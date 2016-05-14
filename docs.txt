@@ -13,7 +13,7 @@ Availible commands:
     0000    ADD    Adds data from @address and accumulator contents and puts it into the accumulator
     0001    SUB    Subtracts data from @address from accumulator contents and puts it into the accumulator
     0010    MUL    Multiplies data from @address from accumulator contents and puts it into the accumulator
-    0011    DIV    Not implemented yet
+    0011    DIV    Divides data from @address by accumulator contents and puts the quotient into the accumulator
 
 --- Logical operations ---
 
@@ -21,6 +21,10 @@ Availible commands:
     0101    OR     Puts 1 into the accumulator, if accumulator contents OR data from @adress contains anything but 0, 0 otherwise
     0110    XOR    Puts 1 into the accumulator, if accumulator contents XOR data from @adress contains anything but 0, 0 otherwise
     0111    NOT    Puts 1 into the accumulator, if accumulator contents is 0, 0 otherwise
+
+--- Other ---
+
+    1011    MOD    Divides data from @address by accumulator contents and puts the reminder into the accumulator
 
 --- Processor functions ---
 
@@ -42,3 +46,4 @@ acc_controller:
  00   From main bus
  01   From operational block
  10   From logical block
+ 11   From operational block's reminder output
